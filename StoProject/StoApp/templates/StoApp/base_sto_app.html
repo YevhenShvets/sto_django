@@ -2,12 +2,14 @@
 <!DOCTYPE html>
 <html>
   <head>
+      <link rel="shortcut icon" href="#">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/> -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+      <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/jquery.inputmask.bundle.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   </head>
 <body>
@@ -17,11 +19,11 @@
               <div class="nav-wrapper">
                 <form action="">
                   <div class="row">
-                      <div class="col s5 m5 l5 xl4 offset-l2 offset-s2 offset-m2">
-                        <input id="main_input" type="text" placeholder="CE1111AO">
+                      <div class="col s5 m5 l7 xl4 offset-l1 offset-s1 offset-m2">
+                        <input id="main_input" class="autocomplete" name="number" type="text" placeholder="CE1111AO" onkeypress="return run_main_input(event)">
                       </div>
-                      <div class="col s4 m3 l3 xl3">
-                        <button id="main_button" class="btn">Вибрати</button>
+                      <div class="col s5 m4 l3 xl3">
+                        <a id="main_button" class="btn" onclick="fun()">Вибрати</a>
                       </div>
                     </div>
                   </form>
@@ -29,61 +31,26 @@
               </div>
           </nav>
     </header>
-
     <div class="content">
-      <div class="row">
-        <div class="col s10 m10 l10 xl10 offset-s1 offset-m1 offset-l1 offset-xl1">
-          <ul class="collapsible right-align z-depth-1-half" style="margin: 0; margin-bottom: 10px; background-color: rgba(1,1,1,0.001);">
-            <li>
-              <div class="collapsible-header">Панель керування<i class="material-icons large" style="float: right;">settings</i></div>
-              <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
-          </ul>
-        </div>
-         <div class="col s12">
-          <ul id="tabs-swipe-demo" class="tabs z-depth-3">
-            <li class="tab col s4">
-              <a class="active" href="#swipe-1">Інформація про авто</a></li>
-            <li class="tab col s4">
-              <a class="" href="#swipe-2">Ремонт</a></li>
-            <li class="tab col s4">
-              <a class="" href="#swipe-3">Розрахунок</a></li>
-          </ul>
-          <div class="tabs-content carousel carousel-slider">
-            <div id="swipe-1" class="col s12 content_tabs">
-              {% block car_info %} {% endblock %}
-          </div>
-            <div id="swipe-2" class="col s12  content_tabs" >
-                <div class="row">
-                  <div class="col l8 s12">
-                    {% block repair %} {% endblock %}
-                  </div>
-                  <div class="col l3 xl3  s12 center-align offset-l1" style="margin-top:40px;">
-                    <a class="waves-effect waves-orange waves-light btn tooltipped " href="" data-position="bottom" data-tooltip="Добавлення нового запису про ремонт"><i class="material-icons left">add</i>Добавити</a>
-                  </div>
-
-                </div>
+        <div class="row">
+            <div class="col s10 m10 l10 xl10 offset-s1 offset-m1 offset-l1 offset-xl1">
+                <ul class="collapsible right-align z-depth-1-half"
+                    style="margin: 0; margin-bottom: 10px; background-color: rgba(1,1,1,0.001);">
+                    <li>
+                        <div class="collapsible-header">Панель керування<i class="material-icons large"
+                                                                           style="float: right;">settings</i></div>
+                        <div class="collapsible-body" style="padding:15px;">
+                            <div class="row">
+                                <div class="col s12">
+                                    <a style="background-color:rgb(95,22,187);" class="waves-effect waves-green btn" href="{% url 'create_car' %}"><i class="material-icons left">directions_car</i>Добавити автомобіль</a>
+                                </div>
+                            </div>
+                        </div>
+                </ul>
             </div>
-            <div id="swipe-3" class="col s12  content_tabs">
-              <div class="row" id="rozrax_items">
-                <a class="modal-trigger black-text" href="#modal1">
-                <div id="rozrax_item" class="col s12 m12 l8 xl12 offset-l2">
-                    <span style="float: left;">Василь</span>
-                    <span style="float: right;">100грн</span>
-                  </div>
-                </a>
-                <a class="modal-trigger black-text" href="#modal1">
-                  <div id="rozrax_item" class="col s12 m12 l8 xl12 offset-l2">
-                      <span style="float: left;">Олег</span>
-                      <span style="float: right;">300грн</span>
-                    </div>
-                  </a>
-              </div>
-            </div>
-          </div>
+            {% block content %} {% endblock %}
         </div>
-      </div>
     </div>
-
     <footer>
       <div class="row">
         <div class="col s12 center-align" style="margin-top:20px;">
@@ -92,7 +59,7 @@
       </div>
     </footer>
 
-    <div id="modal1" class="modal">
+<!--    <div id="modal1" class="modal">
       <div class="modal-content">
         <h4>Розрахувати?</h4>
       </div>
@@ -100,7 +67,25 @@
         <a href="#!" class="modal-close waves-effect waves-green btn-flat">Ні</a>
         <a href="#!" class="modal-close waves-effect waves-green btn-flat">Так</a>
       </div>
-    </div>
+    </div>-->
+
+    <script>
+      {% block autocomplete %}
+            $(document).ready(function(){
+            $('input.autocomplete').autocomplete({
+                data: {
+                {% for d in search_data %}
+                    '{{ d }}': null,
+                {% endfor %}
+            },
+            limit: 10,
+            onAutocomplete: function(txt) {
+              document.getElementById("main_input").value = txt.substring(0,8);
+            }
+            });
+      });
+      {% endblock %}
+    </script>
 
     <script type="text/javascript">
       $('ul.tabs').tabs({
@@ -110,8 +95,22 @@
       $(document).ready(function(){
         $('.modal').modal();
       });
+
+      function fun(){
+        var number = document.getElementById('main_input').value;
+        if (number ===""){ document.getElementById('main_button').href ="/";}
+        else{document.getElementById('main_button').href = "/"+number+"/";}
+      }
+      function run_main_input(e) {
+        if (e.keyCode == 13) {
+          var number = document.getElementById('main_input').value;
+          if (number ===""){ window.location ="/";}
+          else{  window.location = "/"+number+"/";}
+          return false;
+        }
+      }
+
+      $(":input").inputmask();
   </script>
-    <!--JavaScript at end of body for optimized loading-->
-    <!-- <script type="text/javascript" src="js/materialize.min.js"></script> -->
 </body>
 </html>

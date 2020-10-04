@@ -1,65 +1,146 @@
 {% extends 'StoApp/base_sto_app.html' %}
 
-{% block car_info %}
-<div class="car_content">
-    <div class="row">
-        <div class="col l6 m6 s12 xl6">
-            <div class="col s12 xl12">
-                Інформація про машину:
-            </div>
-            <div class="col s11 xl11 offset-xl1 offset-s1">
-                Номер: <span class="_bold">{{ car.number }}</span>
-            </div>
-            <div class="col s11 xl11 offset-xl1 offset-s1">
-                Марка: <span class="_bold">{{ car.mark }}</span>
-            </div>
-            <div class="col s11 xl11 offset-xl1 offset-s1">
-                Модель: <span class="_bold">{{ car.model }}</span>
-            </div>
-            <div class="col s11 xl11 offset-xl1 offset-s1">
-                Рік: <span class="_bold">{{ car.year }}</span>
-            </div>
-            <div class="col s11 xl11 offset-xl1 offset-s1">
-                Об'єм двигуна: <span class="_bold">немаааа</span>
+{% block content %}
+<div class="col s12">
+    <ul id="tabs-swipe-demo" class="tabs z-depth-3">
+        <li class="tab col s4">
+            <a class="active" href="#swipe-1">Інформація про авто</a></li>
+        <li class="tab col s4">
+            <a class="" href="#swipe-2">Ремонт</a></li>
+        <li class="tab col s4">
+            <a class="" href="#swipe-3">Розрахунок</a></li>
+    </ul>
+    <div class="tabs-content carousel carousel-slider">
+        <div id="swipe-1" class="col s12 content_tabs">
+            <div class="car_content">
+                <div class="row">
+                    <div class="col l6 m6 s12 xl6">
+                        <div class="col s12 xl12">
+                            Інформація про машину:
+                        </div>
+                        <div class="col s11 xl11 offset-xl1 offset-s1">
+                            Номер: <span class="_bold">{{ car.number }}</span>
+                        </div>
+                        <div class="col s11 xl11 offset-xl1 offset-s1">
+                            Марка: <span class="_bold">{{ car.mark }}</span>
+                        </div>
+                        <div class="col s11 xl11 offset-xl1 offset-s1">
+                            Модель: <span class="_bold">{{ car.model }}</span>
+                        </div>
+                        <div class="col s11 xl11 offset-xl1 offset-s1">
+                            Рік: <span class="_bold">{{ car.year }}</span>
+                        </div>
+                        <div class="col s11 xl11 offset-xl1 offset-s1">
+                            Об'єм двигуна: <span class="_bold">немаааа</span>
+                        </div>
+                    </div>
+                    <div class="col l6 m6 s12 xl6">
+                        <div class="col s12 xl12">
+                            Загальна інформація:
+                        </div>
+                        <div class="col s11 xl11 offset-xl1 offset-s1">
+                            Власник: <span class="_bold">{{ car.user_name }}</span>
+                        </div>
+                        <div class="col s11 xl11 offset-xl1 offset-s1">
+                            Номер тел.: <span class="_bold">{{ car.user_number }}</span>
+                        </div>
+                        <div class="col s11 xl11 offset-xl1 offset-s1">
+                            Дата останнього візиту: <span class="_bold"
+                                                          style="color:rgb(241,116,24);">{{ last_date }}</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="col l6 m6 s12 xl6">
-            <div class="col s12 xl12">
-                Загальна інформація:
+        <div id="swipe-2" class="col s12  content_tabs">
+            <div class="row">
+                <div class="col l8 s12">
+                    <ul class="collapsible">
+                    {% for r in repairs_types %}
+                    <li>
+                        <div class="collapsible-header">{{ r }}</div>
+                        <div class="collapsible-body rem_items">
+                            <div class="row">
+                                {% for rep in repairs %}
+                                {% if rep.type == r %}
+                                <div class="col l12 s12 rem_item">
+                                    <span style="float: right;">{{ rep.date|date:"M d, Y" }}</span><br>
+                                    <span style="margin-left: 10px; font-style: italic;">{{ rep.description }}</span>
+                                    <span style="margin-top:2px; float: right; color:red; font-weight:bold;">{{rep.price }}</span>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                    </ul>
+                </div>
+                <div class="col l3 xl3  s12 center-align offset-l1" style="margin-top:40px;">
+                    <a class="waves-effect waves-orange waves-light btn tooltipped " href=""
+                       data-position="bottom" data-tooltip="Добавлення нового запису про ремонт"><i
+                            class="material-icons left">add</i>Добавити</a>
+                </div>
+
             </div>
-            <div class="col s11 xl11 offset-xl1 offset-s1">
-                Власник: <span class="_bold">{{ car.user_name }}</span>
-            </div>
-            <div class="col s11 xl11 offset-xl1 offset-s1">
-                Номер тел.: <span class="_bold">{{ car.user_number }}</span>
-            </div>
-            <div class="col s11 xl11 offset-xl1 offset-s1">
-                Дата останнього візиту: <span class="_bold">даааатаааа</span>
+        </div>
+        <div id="swipe-3" class="col s12  content_tabs">
+            <div class="row" id="rozrax_items">
+                <div class="col s12 m12 l8 xl12 offset-l2">
+                    {% if roz_items %}
+                    <ul class="collapsible">
+                        {% for item in roz_items %}
+                        <li>
+                            <div class="collapsible-header" style="font-size: 25px;">
+                                <span style="float: left;">{{ item.user_name }}</span>
+                                <span style="color:red; float:right;">{{ item.price }}грн</span>
+                            </div>
+                            <div class="collapsible-body" style="padding:5px;">
+                                <div class="row">
+                                    {% for rep in item.repairs %}
+                                    <div class="col l12 s12"
+                                         style="font-size:14px; background-color:rgba(1,1,1,0.05); margin-top:3px;">
+                                        <span style="float: right;">{{ rep.date|date:"M d, Y" }}</span><br>
+                                        <span style="margin-left: 10px; font-style: italic;">{{ rep.description }}</span>
+                                        <span style="margin-top:2px; float: right; color:red; font-weight:bold;">{{ rep.price }}</span>
+                                    </div>
+                                    {% endfor %}
+                                    <div class="col l12 s12 m12 xl12 right-align" style="margin-top:10px;">
+                                        <a class="waves-effect waves-light btn btn-small"
+                                           style="font-size:14px; background:rgba(1,2,3,0.3);"><i
+                                                class="material-icons right">check</i>Розрахувати</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <div class="row">
+                        <div class="col l12 center-align">
+                            <h2>Немає даних в розрахунку</h2>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>
 </div>
 {% endblock %}
 
-{% block repair %}
-<ul class="collapsible">
-    {% for r in repairs_types %}
-        <li>
-            <div class="collapsible-header">{{ r }}</div>
-            <div class="collapsible-body rem_items">
-                <div class="row" >
-                    {% for rep in repairs %}
-                        {% if rep.type == r %}
-                            <div class="col l12 s12 rem_item">
-                                <span style="float: right;">{{ rep.date }}</span><br>
-                                <span style="margin-left: 10px; font-style: italic;">{{ rep.description }}</span>
-                                <span style="margin-top:2px; float: right; color:red; font-weight:bold;">{{rep.price }}</span>
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-            </div>
-        </li>
-    {% endfor %}
-</ul>
+{% block autocomplete %}
+$(document).ready(function(){
+    $('input.autocomplete').autocomplete({
+        data: {
+        {% for d in search_data %}
+            '{{ d }}': null,
+        {% endfor %}
+    },
+    limit: 10,
+    onAutocomplete: function(txt) {
+      document.getElementById("main_input").value = txt.substring(0,8);
+    }
+    });
+});
 {% endblock %}

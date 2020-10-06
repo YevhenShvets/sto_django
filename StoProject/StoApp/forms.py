@@ -1,6 +1,7 @@
 from django import forms
 from .models import *
 from django.core.exceptions import ValidationError
+from datetime import datetime
 
 
 class CarForm(forms.ModelForm):
@@ -30,10 +31,11 @@ class RepairForm(forms.ModelForm):
     class Meta:
         model = Repair
         fields = ['type', 'description', 'price', 'date']
-
+        d = datetime.now()
+        date = d.strftime('%d.%m.%Y')
         widgets = {
-            'type': forms.TextInput(attrs={'class': 'validate', 'id': 'input_repair', 'style': 'margin:0; padding:0;'}),
-            'description': forms.Textarea(attrs={'class': 'validate', 'id': 'textarea_repair', 'style': 'margin:0; padding:0; height:100px;'}),
-            'price': forms.NumberInput(attrs={'class': 'validate', 'id': 'input_repair', 'style': 'margin:0; padding:0;'}),
-            'date': forms.DateTimeInput(attrs={'class': 'validate', 'id': 'input_repair', 'style': 'margin:0; padding:0;'})
+            'type': forms.TextInput(attrs={'class': 'validate input_repair_type', 'id': 'input_repair_type'}),
+            'description': forms.Textarea(attrs={'class': 'validate', 'id': 'textarea_repair'}),
+            'price': forms.NumberInput(attrs={'class': 'validate', 'id': 'input_repair'}),
+            'date': forms.DateTimeInput(attrs={'class': 'validate', 'id': 'datepicker', 'value': date})
         }

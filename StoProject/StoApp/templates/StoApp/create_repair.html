@@ -1,17 +1,78 @@
 {% extends 'StoApp/base_sto_app.html' %}
+{% load static %}
+
+{% block search_in_google %}
+<div class="row">
+    <div class="col s8 offset-s2 z-depth-1" style="background-color:rgb(241,241,241); border-radius:5px; margin-bottom:10px;">
+        <div class="col s6 offset-s3 center-align" style="font-size:20px;">
+            Пошук в google
+        </div>
+        <form action="{% url 'search_google' number=car.number %}" method="post">
+            {% csrf_token %}
+            <div class="input-field">
+                <input name="input_value" placeholder="Що шукаємо?" id="google_search" type="text" class="validate" style="border:1px solid gray; border-bottom:2px solid gray; border-radius:10px;">
+            </div>
+            <button formtarget="_blank" type="submit" class="waves-effect waves-teal btn" style="background-color: rgb(16,26,68); margin-bottom:2px;">Шукати</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
 
 {% block content %}
+<style>
+    #input_repair, #datepicker{
+        margin:0;
+        padding:0;
+    }
+    #textarea_repair{
+        height:100px;
+        margin:0;
+        padding:0;
+    }
+    .back_btn{
+        background-color:rgba(1,1,1,0.05);
+        padding:10px;
+        margin 10px auto;
+        display:block;
+        width:min-content;
+        border-radius:60px;
+    }
+    .checkbox_label{
+        color:black;
+        font-size:16px;
+    }
+</style>
+
 <div class="row">
-    <div class="col s12 center-align" style="color:rgb(124,148,23); ">
+<!--    back-->
+    <div class="col s2 offset-s1 left-align">
+        <i class="material-icons small back_btn waves-effect waves-yellow"><a href="{% url 'info_number' number=car.number %}">arrow_back</a></i>
+    </div>
+<!--    name-->
+    <div class="col s6 center-align" style="color:rgb(124,148,23); ">
         <h4>Форма створення запису ремонту</h4>
     </div>
 </div>
-<form action="{% url 'create_car' %}" method="post">
+<form action="{{ form.get_create_url }}" method="post">
     {% csrf_token %}
     {% for field in form %}
+    {% if field.is_hidden %}
+         <div class="row">
+            <div class="input-field col s6 offset-s3">
+                {{ field }}
+            </div>
+        </div>
+    {% else %}
+        <div class="row">
+            <div class="input-field col s6 offset-s3">
+                {{ field.label }}
+                {{ field }}
+            </div>
+        </div>
+    {% endif %}
     {% if field.errors %}
     <div class="row">
-        <div class="col s6 offset-s3">
+        <div class="col s6 offset-s3" >
             <div class="card-panel center-align" style="padding:5px; background-color: rgba(240,52,32,0.8)">
                 <span class="white-text">
                 {{ field.errors }}
@@ -20,18 +81,40 @@
         </div>
     </div>
     {% endif %}
-
+    {% endfor %}
+    <!-- checkbox -->
     <div class="row">
-        <div class="input-field col s6 offset-s3">
-            {{ field.label }}
-            {{ field }}
+        <div class="col s3 offset-s5" style="margin-top:15px;">
+            <input type="checkbox" id="check" name="calculation" checked="checked"/>
+            <label for="check" class="checkbox_label">Добавити в розрахунок</label>
         </div>
     </div>
-    {% endfor %}
+
     <div class="row">
         <div class="col s9 right-align" style="margin-top:10px; margin-bottom:10px;">
             <button type="submit" class="btn waves-effect waves-yellow green">Створити</button>
         </div>
     </div>
 </form>
+{% endblock %}
+
+{% block link %}
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
+    <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+    <script src="{% static 'js/datepicker-uk.js' %}"></script>
+    <script>
+    $(document).ready(function() {
+        $('#datepicker').datepicker({
+             dateFormat: "dd.mm.yy"
+        });
+        $('input.input_repair_type').autocomplete({
+          data: {
+                {% for d in types %}
+                    '{{ d }}': null,
+                {% endfor %}
+            },
+            limit: 10,
+        });
+    });
+    </script>
 {% endblock %}

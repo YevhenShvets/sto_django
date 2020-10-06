@@ -1,6 +1,26 @@
 {% extends 'StoApp/base_sto_app.html' %}
 
+{% block search_in_google %}
+<div class="row">
+    <div class="col s8 offset-s2 z-depth-1" style="background-color:rgb(241,241,241); border-radius:5px; margin-bottom:10px;">
+        <div class="col s6 offset-s3 center-align" style="font-size:20px;">
+            Пошук в google
+        </div>
+        <form action="{% url 'search_google' number=car.number %}" method="post">
+            {% csrf_token %}
+            <div class="input-field">
+                <input name="input_value" placeholder="Що шукаємо?" id="google_search" type="text" class="validate" style="border-radius:5px;">
+            </div>
+            <button formtarget="_blank" type="submit" class="waves-effect waves-teal btn" style="background-color: rgb(16,26,68); margin-bottom:2px;">Шукати</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+
 {% block content %}
+<style>
+</style>
 <div class="col s12">
     <ul id="tabs-swipe-demo" class="tabs z-depth-3">
         <li class="tab col s4">
@@ -10,7 +30,7 @@
         <li class="tab col s4">
             <a class="" href="#swipe-3">Розрахунок</a></li>
     </ul>
-    <div class="tabs-content carousel carousel-slider">
+    <div class="tabs-content carousel carousel-item" id="tabs_id">
         <div id="swipe-1" class="col s12 content_tabs">
             <div class="car_content">
                 <div class="row">
@@ -55,9 +75,9 @@
         <div id="swipe-2" class="col s12  content_tabs">
             <div class="row">
                 <div class="col l8 s12">
-                    <ul class="collapsible">
+                    <ul class="collapsible popout">
                     {% for r in repairs_types %}
-                    <li>
+                    <li onclick="li_()">
                         <div class="collapsible-header">{{ r }}</div>
                         <div class="collapsible-body rem_items">
                             <div class="row">
@@ -77,7 +97,7 @@
                     </ul>
                 </div>
                 <div class="col l3 xl3  s12 center-align offset-l1" style="margin-top:40px;">
-                    <a class="waves-effect waves-orange waves-light btn tooltipped " href=""
+                    <a class="waves-effect waves-orange waves-light btn tooltipped " href="{% url 'create_repair' number=car.number %}"
                        data-position="bottom" data-tooltip="Добавлення нового запису про ремонт"><i
                             class="material-icons left">add</i>Добавити</a>
                 </div>
@@ -129,18 +149,18 @@
 </div>
 {% endblock %}
 
-{% block autocomplete %}
-$(document).ready(function(){
-    $('input.autocomplete').autocomplete({
-        data: {
-        {% for d in search_data %}
-            '{{ d }}': null,
-        {% endfor %}
-    },
-    limit: 10,
-    onAutocomplete: function(txt) {
-      document.getElementById("main_input").value = txt.substring(0,8);
-    }
-    });
-});
+
+{% block link %}
+<script>
+function li_() {
+    var oh=$(this).outerHeight();
+    console.log(oh);
+    document.querySelector("#tabs_id").style.height = "1000px";
+    document.querySelector("#tabs_id > div").style.height = "1000px";
+    document.getElementById("swipe-1").style.height = "1000px";
+    document.getElementById("swipe-2").style.height = "1000px";
+    document.getElementById("swipe-3").style.height = "1000px";
+}
+</script>
 {% endblock %}
+

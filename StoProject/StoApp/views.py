@@ -1,7 +1,6 @@
 from django.shortcuts import render, Http404, HttpResponse, redirect
 from .models import *
 import datetime
-from django.utils import dateparse
 from django.views.generic import View
 from .forms import *
 
@@ -13,6 +12,16 @@ def index(request):
     }
 
     return render(request, 'StoApp/base_sto_app.html', context=context)
+
+
+def search_google(request, number):
+    google_link = 'https://www.google.com/search?q='
+
+    value = request.POST['input_value']
+    car = Car.objects.get(number__iexact=number)
+
+    car_data = f'+{car.mark}+{car.model}+{car.year}'
+    return redirect(google_link+value+car_data)
 
 
 class CarCreate(View):
@@ -42,18 +51,19 @@ class CarInfo(View):
                 raise Http404("Автомобіля не існує")
         repairs = Repair.objects.filter(id_car=car)
 
-        # last date
+        # lastdate
         if repairs:
             d = repairs[len(repairs)-1].date
-            lastdate = datetime.date(d.year, d.month, d.day).strftime("%d.%m.%Y")
+            lastdate = datetime(d.year, d.month, d.day).strftime("%d.%m.%Y")
         else:
-            lastdate = datetime.datetime.now().strftime("%d.%m.%Y")
+            lastdate = datetime.now().strftime("%d.%m.%Y")
 
         # create rozrax items
         roz_items = get_roz_items()
 
         # create types repair
         types = [t.type for t in repairs]
+        types = set(types)
 
         # create search data string
         search_data = get_search_data()
@@ -74,9 +84,23 @@ class CarInfo(View):
 class RepairCreate(View):
     def get(self, request, number):
         form = RepairForm()
-        return render(request, 'StoApp/create_repair.html', context={'form': form, 'search_data': get_search_data()})
+        car = Car.objects.get(number__iexact=number.upper())
+        repairs = Repair.objects.filter(id_car=car)
+        types = [t.type for t in repairs]
+        types = set(types)
+        return render(request, 'StoApp/create_repair.html', context={'form': form, 'types': types, 'car': car, 'search_data': get_search_data()})
 
-
+    def post(self, request, number):
+        repair = RepairForm(request.POST)
+        is_calculation = request.POST.get('calculation')
+        print(is_calculation, '\n\n\n\n')
+        if repair.is_valid():
+            car = Car.objects.get(number__iexact=number)
+            new_repair = repair.save(commit=False)
+            new_repair.id_car = car
+            new_repair.save()
+            return redirect('info_number', number)
+        return render(request, 'StoApp/create_repair.html', context={'form': repair, 'search_data': get_search_data()})
 
 
 def get_roz_items():

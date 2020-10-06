@@ -1,4 +1,5 @@
 from django.db import models
+from django.shortcuts import  reverse
 
 
 class Car(models.Model):
@@ -23,6 +24,9 @@ class Repair(models.Model):
 
     def __str__(self):
         return self.description
+
+    def get_create_url(self):
+        return reverse('create_repair', kwargs={'number': self.id_car.number})
 
 
 class Calculation(models.Model):

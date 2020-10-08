@@ -72,22 +72,6 @@ nav.top-nav {
     font-size: 16px;
 }
 
-#swipe-1, #swipe-2, #swipe-3{
-    height: 1000px;
-}
-
-/* #swipe-1{
-    background-color: rgba(165, 175, 235, 0.295);
-}
-
-#swipe-2{
-    background-color: rgba(45, 95, 30, 0.24);
-} */
-
-.content_tabs{
-    border-left: 1px solid rgba(0, 0, 0, 0.384);
-    border-right: 1px solid rgba(0, 0, 0, 0.384);
-}
 
 .car_content{
     font-size: 20px;

@@ -24,6 +24,16 @@ def search_google(request, number):
     return redirect(google_link+value+car_data)
 
 
+def calculation(request, number):
+    if request.method == 'POST':
+        id_calculation = request.POST['id_calculation']
+        print('\n\n\n', request.POST)
+        calc = Calculation.objects.get(id=id_calculation)
+        calc.is_active = False;
+        calc.save();
+
+    return redirect('info_number', number=number)
+
 class CarCreate(View):
     def get(self, request):
         form = CarForm()
@@ -38,7 +48,6 @@ class CarCreate(View):
             new_car = car.save()
             return redirect('info_number', new_car.number)
         return render(request, 'StoApp/create_form.html', context={'form': car, 'search_data': get_search_data()})
-
 
 
 class CarInfo(View):
@@ -93,12 +102,26 @@ class RepairCreate(View):
     def post(self, request, number):
         repair = RepairForm(request.POST)
         is_calculation = request.POST.get('calculation')
-        print(is_calculation, '\n\n\n\n')
         if repair.is_valid():
             car = Car.objects.get(number__iexact=number)
             new_repair = repair.save(commit=False)
             new_repair.id_car = car
-            new_repair.save()
+            rep = new_repair.save()
+
+            # add to calculation
+            if is_calculation:
+                is_create = True
+                calc = Calculation.objects.filter(is_active=True)
+                for c in calc:
+                    if c.id_car == car:
+                        is_create = False
+                if is_create:
+                    c = Calculation.objects.create(id_car=car, is_active=True)
+                    ci = CalculationItem.objects.create(id_calculation=c, id_repair=new_repair)
+                else:
+                    c = Calculation.objects.get(id_car=car)
+                    ci = CalculationItem.objects.create(id_calculation=c, id_repair=new_repair)
+
             return redirect('info_number', number)
         return render(request, 'StoApp/create_repair.html', context={'form': repair, 'search_data': get_search_data()})
 
@@ -117,6 +140,7 @@ def get_roz_items():
             repairs.append(rem)
             sum+=rem.price
         s = {
+            "id_calculation": c.id,
             "user_name": user_name,
             "repairs": repairs,
             "price": sum

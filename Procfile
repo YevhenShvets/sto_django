@@ -1,0 +1,1 @@
+web: gunicorn sto-writer.wsgi --log-file -

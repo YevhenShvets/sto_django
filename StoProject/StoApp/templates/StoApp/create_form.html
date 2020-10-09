@@ -2,7 +2,7 @@
 
 {% block content %}
 <style>
-    #input_car{
+    #form_car input{
         border:1px solid olive;
         border-radius:10px;
         height:40px;
@@ -24,7 +24,7 @@
         <h4>Форма добавлення авто</h4>
     </div>
 </div>
-<form  action="{% url 'create_car' %}" method="post">
+<form id="form_car" action="{% url 'create_car' %}" method="post">
     {% csrf_token %}
     {% for field in form %}
         <div class="row">
@@ -56,6 +56,8 @@
 {% block link %}
 <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/jquery.inputmask.bundle.js"></script>
 <script>
-    $(":input").inputmask();
+    $(document).ready(function(){
+     $(":input").inputmask();
+    });
 </script>
 {% endblock %}

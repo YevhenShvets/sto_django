@@ -3,8 +3,10 @@ from .models import *
 import datetime
 from django.views.generic import View
 from .forms import *
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 
-
+@login_required
 def index(request):
     search_data = get_search_data()
     context = {
@@ -14,6 +16,7 @@ def index(request):
     return render(request, 'StoApp/base_sto_app.html', context=context)
 
 
+@login_required
 def search_google(request, number):
     google_link = 'https://www.google.com/search?q='
 
@@ -24,17 +27,19 @@ def search_google(request, number):
     return redirect(google_link+value+car_data)
 
 
+@login_required
 def calculation(request, number):
     if request.method == 'POST':
         id_calculation = request.POST['id_calculation']
         print('\n\n\n', request.POST)
         calc = Calculation.objects.get(id=id_calculation)
-        calc.is_active = False;
-        calc.save();
+        calc.is_active = False
+        calc.save()
 
     return redirect('info_number', number=number)
 
-class CarCreate(View):
+
+class CarCreate(LoginRequiredMixin, View):
     def get(self, request):
         form = CarForm()
         search_data = get_search_data()
@@ -50,7 +55,7 @@ class CarCreate(View):
         return render(request, 'StoApp/create_form.html', context={'form': car, 'search_data': get_search_data()})
 
 
-class CarInfo(View):
+class CarInfo(LoginRequiredMixin, View):
     def get(self, request, number):
         try:
             if not number:
@@ -90,7 +95,8 @@ class CarInfo(View):
 
         return render(request, 'StoApp/car_info.html', context=context)
 
-class RepairCreate(View):
+
+class RepairCreate(LoginRequiredMixin, View):
     def get(self, request, number):
         form = RepairForm()
         car = Car.objects.get(number__iexact=number.upper())

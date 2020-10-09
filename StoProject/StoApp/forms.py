@@ -10,12 +10,12 @@ class CarForm(forms.ModelForm):
         fields = ['number', 'mark', 'model', 'year', 'user_name', 'user_number']
 
         widgets = {
-            'number': forms.TextInput(attrs={'class': 'validate', 'id': 'input_car', 'style': 'margin:0; padding:0; text-transform: uppercase;'}),
-            'mark': forms.TextInput(attrs={'class': 'validate', 'id': 'input_car', 'style': 'margin:0; padding:0;'}),
-            'model': forms.TextInput(attrs={'class': 'validate', 'id': 'input_car', 'style': 'margin:0; padding:0;'}),
-            'year': forms.NumberInput(attrs={'class': 'validate', 'id': 'input_car', 'style': 'margin:0; padding:0;'}),
-            'user_name': forms.TextInput(attrs={'class': 'validate', 'id': 'input_car', 'style': 'margin:0; padding:0;'}),
-            'user_number': forms.TextInput(attrs={'class': 'validate', 'id': 'input_car', 'style': 'margin:0; padding:0;', 'data-inputmask': "'mask': '+38(099) 999-9999'"})
+            'number': forms.TextInput(attrs={'class': 'validate input_car',  'style': 'margin:0; padding:0; text-transform: uppercase;'}),
+            'mark': forms.TextInput(attrs={'class': 'validate input_car',  'style': 'margin:0; padding:0;'}),
+            'model': forms.TextInput(attrs={'class': 'validate input_car',  'style': 'margin:0; padding:0;'}),
+            'year': forms.NumberInput(attrs={'class': 'validate input_car', 'style': 'margin:0; padding:0;'}),
+            'user_name': forms.TextInput(attrs={'class': 'validate input_car', 'style': 'margin:0; padding:0;'}),
+            'user_number': forms.TextInput(attrs={'class': 'validate input_car', 'id':'input_user_number', 'style': 'margin:0; padding:0;', 'data-inputmask': "'mask': '+38(099) 999-9999'"})
         }
 
     def clean_number(self):

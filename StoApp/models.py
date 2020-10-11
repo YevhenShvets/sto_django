@@ -9,7 +9,7 @@ class Car(models.Model):
     year = models.IntegerField(verbose_name='Рік')
 
     user_name = models.CharField(max_length=80, db_index=True, verbose_name="Ім'я власника")
-    user_number = models.CharField(max_length=15, db_index=True, verbose_name='Телефон власника')
+    user_number = models.CharField(max_length=17, db_index=True, verbose_name='Телефон власника')
 
     def __str__(self):
         return f'User: {self.user_name}|Number: {self.number}'

@@ -1,0 +1,63 @@
+{% extends 'StoApp/base_sto_app.html' %}
+
+{% block content %}
+<style>
+    #form_car input{
+        border:1px solid olive;
+        border-radius:10px;
+        height:40px;
+    }
+    .back_btn{
+        background-color:rgba(1,1,1,0.05);
+        padding:10px;
+        margin 10px auto;
+        display:block;
+        width:min-content;
+        border-radius:60px;
+    }
+</style>
+<div class="row" >
+    <div class="col s2 offset-s1 left-align">
+        <i class="material-icons small back_btn waves-effect waves-yellow"><a href="{% url 'index' %}">arrow_back</a></i>
+    </div>
+    <div class="col s6 center-align" style="color:rgb(124,148,23); ">
+        <h4>Форма добавлення авто</h4>
+    </div>
+</div>
+<form id="form_car" action="{% url 'create_car' %}" method="post">
+    {% csrf_token %}
+    {% for field in form %}
+        <div class="row">
+            <div class="input-field col s6 offset-s3">
+                {{ field.label }}
+                {{ field }}
+            </div>
+        </div>
+     {% if field.errors %}
+            <div class="row">
+                <div class="col s6 offset-s3">
+                    <div class="card-panel center-align" style="padding:5px; background-color: rgba(240,52,32,0.8)">
+                        <span class="white-text">
+                            {{ field.errors }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+    <div class="row">
+        <div class="col s9 right-align" style="margin-top:10px; margin-bottom:10px;">
+            <button type="submit" class="btn waves-effect waves-yellow green">Створити</button>
+        </div>
+    </div>
+</form>
+{% endblock %}
+
+{% block link %}
+<script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/jquery.inputmask.bundle.js"></script>
+<script>
+    $(document).ready(function(){
+     $(":input").inputmask();
+    });
+</script>
+{% endblock %}

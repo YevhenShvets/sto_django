@@ -1,0 +1,106 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+      {% block link %} {% endblock %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  </head>
+<body>
+    <!--search-->
+    <header>
+        <nav class="top-nav">
+            <div class="container">
+              <div class="nav-wrapper">
+                <form action="">
+                  <div class="row">
+                      <div class="col s5 m5 l7 xl4 offset-l1 offset-s1 offset-m2">
+                        <input id="main_input" class="autocomplete" name="number" type="text" placeholder="CE1111AO" onkeypress="return run_main_input(event)">
+                      </div>
+                      <div class="col s5 m4 l3 xl3">
+                        <a id="main_button" class="btn" onclick="fun()">Вибрати</a>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+          </nav>
+    </header>
+    <!--control panel-->
+    <div class="content">
+        <div class="row">
+            <div class="col s10 m10 l10 xl10 offset-s1 offset-m1 offset-l1 offset-xl1">
+                <ul class="collapsible popout right-align z-depth-1-half"
+                    style="margin: 0; margin-bottom: 10px; background-color: rgba(1,1,1,0.001);">
+                    <li>
+                        <div class="collapsible-header">Панель керування<i class="material-icons large"
+                                                                           style="float: right;">settings</i></div>
+                        <div class="collapsible-body" style="padding:15px 10px;">
+                            {% block search_in_google %}  {% endblock %}
+                            <div class="row">
+                                <div class="col s12">
+                                    <a style="background-color:rgb(95,22,187);" class="waves-effect waves-green btn" href="{% url 'create_car' %}"><i class="material-icons left">directions_car</i>Добавити автомобіль</a>
+                                </div>
+                            </div>
+                        </div>
+                </ul>
+            </div>
+        </div>
+        <!--block content-->
+        {% block content %} {% endblock %}
+    </div>
+    <!--footer-->
+<!--    <footer>-->
+<!--      <div class="row">-->
+<!--        <div class="col s12 center-align" style="margin-top:20px;">-->
+<!--          Yevhen Shvets-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </footer>-->
+
+    <script>
+      {% block autocomplete %}
+            $(document).ready(function(){
+            $('input.autocomplete').autocomplete({
+                data: {
+                {% for d in search_data %}
+                    '{{ d }}': null,
+                {% endfor %}
+            },
+            limit: 10,
+            onAutocomplete: function(txt) {
+              document.getElementById("main_input").value = txt.substring(0,8);
+            }
+            });
+      });
+      {% endblock %}
+    </script>
+    <script type="text/javascript">
+      $('ul.tabs').tabs({
+      swipeable: true,
+      responsiveThreshold: Infinity
+      });
+      $(document).ready(function(){
+        $('.modal').modal();
+      });
+
+      function fun(){
+        var number = document.getElementById('main_input').value;
+        if (number ===""){ document.getElementById('main_button').href ="/";}
+        else{document.getElementById('main_button').href = "/"+number+"/";}
+      }
+      function run_main_input(e) {
+        if (e.keyCode == 13) {
+          var number = document.getElementById('main_input').value;
+          if (number ===""){ window.location ="/";}
+          else{  window.location = "/"+number+"/";}
+          return false;
+        }
+      }
+  </script>
+</body>
+</html>

@@ -1,0 +1,141 @@
+body{
+    background-color: rgba(131, 131, 131, 0.1);
+}
+
+nav.top-nav{
+    margin: 0;
+    padding-top: 0px;
+}
+
+.header {
+    color: #ee6e73;
+    font-weight: 300;
+}
+
+nav.top-nav {
+    height: 70px;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border-bottom: 1px solid rgba(0,0,0,0.14);
+    background-color: rgba(0, 0, 0, 0.1);
+}
+/* input{
+    display: block;
+    box-sizing: border-box;
+    border: 1px solid black;
+    text-align: center;
+    text-transform: uppercase;
+} */
+
+::placeholder{
+    color: gray;
+    opacity: 0.8;
+}
+
+
+#main_input{
+    color: #777;
+    display: block;
+    font-size: 20px;
+    font-weight: 300;
+    width: 100%;
+    padding: 0;
+    margin-top: 5px;
+    text-align: center;
+    text-transform: uppercase;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    border: 2px solid rgba(7, 37, 133, 0.555);
+    border-radius: 10px;
+    background-color: white;
+}
+
+#main_button{
+    margin-top: 10px;
+    display: block;
+    background-color: blue;
+    border-radius: 20px;
+}
+
+
+.carousel .carousel-item {
+    width: 100%;
+}
+
+#tabs-swipe-demo{
+    background-color: rgba(0, 44, 27, 0.808);
+    border-radius: 5px;
+}
+
+#tabs-swipe-demo li a{
+    color: rgb(204, 204, 204);
+    font-size: 16px;
+}
+
+
+.car_content{
+    font-size: 20px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.info_car{
+    margin-left: 30px;
+}
+
+footer{
+    background: rgba(0, 0, 0, 0.1);
+    border-top: 1px solid rgba(0, 0, 0, 0.2);
+    min-height: 100px;
+}
+.row{
+    margin-bottom: 0;
+}
+
+._bold{
+    font-weight: bold;
+}
+
+.rem_items{
+    padding-left: 5px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.collapsible-header{
+    background-color: rgba(255, 255, 255, 0.411);
+}
+
+.rem_item{
+    height: 60px;
+    background-color: rgba(158, 158, 158, 0.267);
+    margin-bottom: 2px;
+
+}
+
+.rem_item:hover{
+    background-color: orange;
+}
+
+#rozrax_items{
+    margin-top: 10px;
+}
+
+#rozrax_item{
+    background-color: rgba(87, 87, 85, 0.151);
+    margin-top: 5px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+
+#rozrax_item:hover{
+    background-color: rgba(87, 87, 85, 0.3);
+}
+
+.modal{
+    padding-left: 20px;
+    padding-right: 20px;
+    width: min-content !important ;
+    height: min-content !important ;
+}
+

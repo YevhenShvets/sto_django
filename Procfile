@@ -1,1 +1,1 @@
-web: gunicorn sto-master.wsgi
+web: gunicorn stomaster.wsgi

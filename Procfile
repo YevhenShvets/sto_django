@@ -1,1 +1,1 @@
-web: gunicorn stomaster.wsgi:application --log-file -
+web: gunicorn StoProject.wsgi --log-file -
